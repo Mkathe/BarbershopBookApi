@@ -1,0 +1,7 @@
+﻿services:
+  barbershopbookapi:
+    image: barbershopbookapi
+    build:
+      context: .
+      dockerfile: BarbershopBookApi/Dockerfile
+
