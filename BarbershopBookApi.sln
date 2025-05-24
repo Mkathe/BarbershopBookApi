@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarbershopBookApi.WebApi", "BarbershopBookApi.WebApi\BarbershopBookApi.WebApi.csproj", "{D070B6D9-59C1-4F91-8C62-0FF5293DC17B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{434B5B69-15C6-48B4-B538-E918871FC572}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarbershopBookApi.Domain", "BarbershopBookApi.Domain\BarbershopBookApi.Domain.csproj", "{E5487722-3FAD-46B4-82F9-AE5097643800}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarbershopBookApi.Infrastructure", "BarbershopBookApi.Infrastructure\BarbershopBookApi.Infrastructure.csproj", "{CBCAE4FC-7DCF-4AA3-91ED-B0BE97DDFA6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarbershopBookApi.Application", "BarbershopBookApi.Application\BarbershopBookApi.Application.csproj", "{40A62A01-DB62-4D82-866F-8488D565B2DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarbershopBookApi.Tests", "BarbershopBookApi.Tests\BarbershopBookApi.Tests.csproj", "{AA9AE8B9-73E2-4F40-B686-59E1AFE123C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D070B6D9-59C1-4F91-8C62-0FF5293DC17B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D070B6D9-59C1-4F91-8C62-0FF5293DC17B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D070B6D9-59C1-4F91-8C62-0FF5293DC17B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D070B6D9-59C1-4F91-8C62-0FF5293DC17B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5487722-3FAD-46B4-82F9-AE5097643800}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5487722-3FAD-46B4-82F9-AE5097643800}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5487722-3FAD-46B4-82F9-AE5097643800}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5487722-3FAD-46B4-82F9-AE5097643800}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBCAE4FC-7DCF-4AA3-91ED-B0BE97DDFA6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBCAE4FC-7DCF-4AA3-91ED-B0BE97DDFA6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBCAE4FC-7DCF-4AA3-91ED-B0BE97DDFA6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBCAE4FC-7DCF-4AA3-91ED-B0BE97DDFA6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40A62A01-DB62-4D82-866F-8488D565B2DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40A62A01-DB62-4D82-866F-8488D565B2DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40A62A01-DB62-4D82-866F-8488D565B2DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40A62A01-DB62-4D82-866F-8488D565B2DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA9AE8B9-73E2-4F40-B686-59E1AFE123C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA9AE8B9-73E2-4F40-B686-59E1AFE123C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA9AE8B9-73E2-4F40-B686-59E1AFE123C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA9AE8B9-73E2-4F40-B686-59E1AFE123C2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

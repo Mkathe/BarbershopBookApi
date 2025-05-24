@@ -1,0 +1,74 @@
+using BarbershopBookApi.Application.DTOs;
+using BarbershopBookApi.Application.Interfaces;
+using BarbershopBookApi.Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BarbershopBookApi.Controllers;
+[ApiController]
+[Route("api/[controller]")]
+public class AdminController : ControllerBase
+{
+    private readonly IAdminRepository _repository;
+    private readonly IAuthService _authService;
+
+    public AdminController(IAuthService authService)
+    {
+        _authService = authService;
+    }
+    [HttpGet("admins")]
+    public async Task<IActionResult> GetAdmins()
+    {
+        var admins = await _repository.GetAdmins();
+        return Ok(admins);
+    }
+
+    [HttpGet("admins/{id:guid}")]
+    public async Task<IActionResult> GetAdminById([FromRoute] Guid Id)
+    {
+        var result = await _repository.GetAdmin(id: Id);
+        return Ok(result);
+    }
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public async Task<ActionResult<AdminModel>> Register(AdminDto request)
+    {
+        var user = await _authService.RegisterAdmin(request);
+        if (user == null)
+        {
+            return BadRequest("Admin already exists");
+        }
+        return Ok(user);
+    }
+    [HttpPost("login")]
+    [AllowAnonymous]
+    public async Task<ActionResult<TokenResponseDto>> Login(AdminDto adminDto)
+    {
+        var result = await _authService.LoginAdmin(adminDto);
+        if (result is null)
+            return BadRequest("The username or password is invalid");
+        return Ok(result);
+    }
+    [HttpPost("RefreshToken")]
+    public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
+    {
+        var result = await _authService.RefreshTokenAsync(request);
+        if (result is null || result.AccessToken is null || result.RefreshToken is null)
+        {
+            return Unauthorized("Invalid refresh token");
+        }
+        return Ok(result);
+    }
+    [HttpGet("Check")]
+    [Authorize]
+    public IActionResult AuthenticatedOnlyEndpoint()
+    {
+        return Ok("You are authenticated");
+    }
+    [Authorize(Roles = "Admin")]
+    [HttpGet("AdminOnly")]
+    public IActionResult AdminOnlyEndpoint()
+    {
+        return Ok("You are admin!");
+    }
+}
