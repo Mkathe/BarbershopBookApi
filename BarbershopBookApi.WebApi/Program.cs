@@ -82,6 +82,7 @@ public class Program
         builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
         builder.Services.AddScoped<IHairdresserRepository, HairdresserRepository>();
         builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<IBookingService, BookingService>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -99,7 +100,6 @@ public class Program
 
 
         app.MapControllers();
-        app.MapGet("/", () => "Hello World!");
         app.Run();
     }
 }

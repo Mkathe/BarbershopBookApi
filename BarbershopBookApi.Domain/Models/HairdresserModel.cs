@@ -8,4 +8,6 @@ public class HairdresserModel
     public string HiredIn { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
+    public DateTime Date { get; set; } 
+    public bool IsBooked { get; set; } = false;
 }

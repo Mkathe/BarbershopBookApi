@@ -81,6 +81,9 @@ namespace BarbershopBookApi.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -88,6 +91,9 @@ namespace BarbershopBookApi.Infrastructure.Migrations
                     b.Property<string>("HiredIn")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsBooked")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()

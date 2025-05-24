@@ -16,10 +16,6 @@ public class AdminRepository : IAdminRepository
 
     public async Task<IEnumerable<AdminModel>> GetAdmins()
     {
-        if (await _context.Admins.AnyAsync(x => x.Id == Guid.Empty))
-        {
-            return null!;
-        }
         var admins = await _context.Admins.ToListAsync();
         return admins;
     }

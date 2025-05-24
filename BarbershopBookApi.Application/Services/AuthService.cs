@@ -65,14 +65,6 @@ public class AuthService : IAuthService
         };
         return response;
     }
-    /*private string GenerateRefreshToken()
-    {
-        var randomNumber = new byte[32];
-        using var rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
-    }*/
-
     private string CreateToken(AdminModel admin)
     {
         var claims = new List<Claim>()

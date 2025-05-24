@@ -12,11 +12,13 @@ public class AdminController : ControllerBase
     private readonly IAdminRepository _repository;
     private readonly IAuthService _authService;
 
-    public AdminController(IAuthService authService)
+    public AdminController(IAuthService authService, IAdminRepository repository)
     {
         _authService = authService;
+        _repository = repository;
     }
     [HttpGet("admins")]
+    [Authorize]
     public async Task<IActionResult> GetAdmins()
     {
         var admins = await _repository.GetAdmins();
@@ -24,6 +26,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet("admins/{id:guid}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAdminById([FromRoute] Guid Id)
     {
         var result = await _repository.GetAdmin(id: Id);

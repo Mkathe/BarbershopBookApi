@@ -1,3 +1,4 @@
+using BarbershopBookApi.Application.DTOs;
 using BarbershopBookApi.Application.Interfaces;
 using BarbershopBookApi.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -19,15 +20,21 @@ public class CustomerRepository : ICustomerRepository
         var customers = await _context.Customers.ToListAsync();
         return customers;
     }
-    public async Task<CustomerModel> GetCustomer(Guid id)
+    public async Task<CustomerModel?> GetCustomer(Guid id)
     {
         var customer = await _context.Customers.FindAsync(id);
         if (customer is null)
             return null!;
         return customer;
     }
-    public async Task<CustomerModel> AddCustomer(CustomerModel customer)
+    public async Task<CustomerModel> AddCustomer(CustomerDto customerDto)
     {
+        var customer = new CustomerModel()
+        {   
+            Id = Guid.NewGuid(),
+            Email = customerDto.Email,
+            Phone = customerDto.Phone
+        };
         await _context.Customers.AddAsync(customer);
         await _context.SaveChangesAsync();
         return customer;
