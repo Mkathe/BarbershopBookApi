@@ -26,14 +26,14 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet("admins/{id:guid}")]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<IActionResult> GetAdminById([FromRoute] Guid Id)
     {
         var result = await _repository.GetAdmin(id: Id);
         return Ok(result);
     }
     [HttpPost("register")]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<ActionResult<AdminModel>> Register(AdminDto request)
     {
         var user = await _authService.RegisterAdmin(request);
@@ -53,6 +53,7 @@ public class AdminController : ControllerBase
         return Ok(result);
     }
     [HttpPost("RefreshToken")]
+    [Authorize]
     public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
     {
         var result = await _authService.RefreshTokenAsync(request);

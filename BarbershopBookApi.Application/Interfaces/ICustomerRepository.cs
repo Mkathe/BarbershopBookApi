@@ -6,6 +6,9 @@ namespace BarbershopBookApi.Application.Interfaces;
 public interface ICustomerRepository
 {
     Task<IEnumerable<CustomerModel>> GetCustomers();
-    Task<CustomerModel?> GetCustomer(Guid id);
+    Task<CustomerModel?> GetCustomerById(Guid id);
+    Task<CustomerModel?> GetCustomerByEmail(string email);
     Task<CustomerModel> AddCustomer(CustomerDto Dto);
+    Task AddCustomerAfterBooking(BookingRequestDto bookingRequestDto);
+    Task<CustomerModel?> DeleteCustomer(Guid id);
 }

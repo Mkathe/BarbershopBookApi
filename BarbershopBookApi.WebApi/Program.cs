@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using sib_api_v3_sdk.Client;
 using ILogger = Serilog.ILogger;
 
 namespace BarbershopBookApi;
@@ -21,11 +22,12 @@ public class Program
             .Enrich.FromLogContext()
             .CreateLogger();
         var builder = WebApplication.CreateBuilder(args);
+        Configuration.Default.ApiKey.Add("api-key", builder.Configuration["BrevoApi:ApiKey"]);;
         //Host
         builder.Host.UseSerilog();
         // Add services to the container.
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+            options.UseNpgsql(builder.Configuration["ConnectionStrings:Postgres"]));
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -92,14 +94,13 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
-
-
         app.MapControllers();
+        app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
         app.Run();
     }
 }

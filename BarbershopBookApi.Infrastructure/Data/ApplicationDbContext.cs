@@ -14,4 +14,13 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<CustomerModel> Customers => Set<CustomerModel>();
     public DbSet<AdminModel> Admins => Set<AdminModel>();
     public DbSet<HairdresserModel> Hairdressers => Set<HairdresserModel>();
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<HairdresserModel>()
+            .Property(x => x.FreeDateTime)
+            .HasColumnType("timestamp[]");
+        modelBuilder.Entity<CustomerModel>()
+            .Property(x => x.ChoosedDate)
+            .HasColumnType("timestamp");
+    }
 }

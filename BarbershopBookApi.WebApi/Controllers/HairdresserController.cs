@@ -26,12 +26,35 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
 
     public async Task<IActionResult> GetHairdresserById([FromRoute] Guid id)
     {
-        var result = await _repository.GetHairdresser(id);
+        var result = await _repository.GetHairdresserById(id);
         if (result is null)
             return NotFound("Hairdresser is not found");
         return Ok(result);
     }
+    [HttpGet("hairdresser/lastName")]
+    [AllowAnonymous]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
 
+    public async Task<IActionResult> GetHairdresserByLastName(string lastName)
+    {
+        var result = await _repository.GetHairdresserByLastName(lastName);
+        if (result is null)
+            return NotFound("Hairdresser is not found");
+        return Ok(result);
+    }
+    [HttpGet("hairdresser/check/isAvailable")]
+    [AllowAnonymous]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+
+    public async Task<ActionResult<bool>> IsHairdresserFreeAtTheChoosingDate(string lastName, DateTime date)
+    {
+        var result = await _repository.IsHairdresserFreeAtTheChoosingDate(lastName, date);
+        if (result is false)
+            return NotFound("Hairdresser is not found or busy");
+        return Ok(result);
+    }
     [HttpPost]
     [Authorize]
     [ProducesResponseType(201)]
@@ -52,14 +75,30 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
             return BadRequest("The hairdresser is not found or null");
         return NoContent();
     }
-    [HttpPut("hairdressers/booking")]
+    [HttpPost("hairdressers/booking")]
     [AllowAnonymous]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public async Task<IActionResult> BookHairdresser([FromBody] BookingRequestDto bookingRequestDto)
     {
-        var success = await _bookingService.BookHairdresserAsync(bookingRequestDto.HairdresserId, bookingRequestDto.Date, bookingRequestDto.CustomerPhone, bookingRequestDto.CustomerEmail);
+        var success = await _bookingService.BookHairdresserAsync(bookingRequestDto);
         if (!success)
             return BadRequest("Hairdresser is already booked or not found on that date");
-        return Ok("Booking successful. SMS sent");
+        return Ok("Booking successful. Email is sending...");
+    }
+    [HttpPatch("hairdressers/booking/unbook/{lastname}")]
+    [Authorize]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> UnBookHairdresser([FromRoute] string lastname)
+    {
+        var model = await _repository.ToUnBook(lastname);
+        if (model is null)
+            return BadRequest("Hairdresser's lastname is misspelled or not found");
+        return Ok(model);
     }
     [HttpDelete("hairdresser/delete/{id:guid}")]
     [Authorize]
@@ -69,7 +108,7 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
     {
         var result = await _repository.DeleteHairdresser(id);
         if (result is null)
-            return NotFound("The haridresser is not found");
+            return NotFound("The hairdresser is not found");
         return NoContent();
     }
 }

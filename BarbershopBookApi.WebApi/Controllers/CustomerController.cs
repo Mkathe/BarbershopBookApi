@@ -16,7 +16,9 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet("customers")]
-    [AllowAnonymous]
+    [Authorize]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
     public async Task<IActionResult> GetCustomers()
     {
         var result = await _repository.GetCustomers();
@@ -24,20 +26,46 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet("customer/{id:guid}", Name = nameof(GetCustomerById))]
-    [AllowAnonymous]
+    [Authorize]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
     public async Task<IActionResult> GetCustomerById(Guid id)
     {
-        var result = await _repository.GetCustomer(id);
+        var result = await _repository.GetCustomerById(id);
         if (result is null)
             return NotFound("No customer is found");
         return Ok(result);
     }
-
+    [HttpGet("customer/{email}")]
+    [Authorize]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetCustomerByEmail(string email)
+    {
+        var result = await _repository.GetCustomerByEmail(email);
+        if (result is null)
+            return NotFound("No customer is found");
+        return Ok(result);
+    }
     [HttpPost]
-    [AllowAnonymous]
+    [Authorize]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
     public async Task<IActionResult> AddCustomer([FromBody] CustomerDto customerDto)
     {
         var customer = await _repository.AddCustomer(customerDto);
         return CreatedAtRoute(nameof(GetCustomerById), new { id = customer.Id}, customer);
+    }
+
+    [HttpDelete("delete/{id:guid}")] 
+    [Authorize] 
+    [ProducesResponseType(204)] 
+    [ProducesResponseType(400)]
+    public async Task<IActionResult> DeleteCustomer([FromRoute] Guid id)
+    {
+        var customer = await _repository.DeleteCustomer(id);
+        if (customer is null)
+            return NotFound("No customer is found");
+        return NoContent();
     }
 }

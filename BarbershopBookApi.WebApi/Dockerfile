@@ -1,23 +1,24 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 5000
+EXPOSE 5001
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BarbershopBookApi/BarbershopBookApi.csproj", "BarbershopBookApi/"]
-RUN dotnet restore "BarbershopBookApi/BarbershopBookApi.csproj"
+COPY ["BarbershopBookApi.WebApi/BarbershopBookApi.WebApi.csproj", "BarbershopBookApi.WebApi/"]
+COPY ["BarbershopBookApi.Application/BarbershopBookApi.Application.csproj", "BarbershopBookApi.Application/"]
+COPY ["BarbershopBookApi.Domain/BarbershopBookApi.Domain.csproj", "BarbershopBookApi.Domain/"]
+COPY ["BarbershopBookApi.Infrastructure/BarbershopBookApi.Infrastructure.csproj", "BarbershopBookApi.Infrastructure/"]
+
+RUN dotnet restore "BarbershopBookApi.WebApi/BarbershopBookApi.WebApi.csproj"
 COPY . .
-WORKDIR "/src/BarbershopBookApi"
-RUN dotnet build "./BarbershopBookApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/BarbershopBookApi.WebApi"
+RUN dotnet build "BarbershopBookApi.WebApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./BarbershopBookApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "BarbershopBookApi.WebApi.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BarbershopBookApi.dll"]
+ENTRYPOINT ["dotnet", "BarbershopBookApi.WebApi.dll"]
