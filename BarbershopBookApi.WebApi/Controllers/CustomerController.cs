@@ -21,6 +21,8 @@ public class CustomerController : ControllerBase
     [ProducesResponseType(400)]
     public async Task<IActionResult> GetCustomers()
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _repository.GetCustomers();
         return Ok(result);
     }
@@ -31,6 +33,8 @@ public class CustomerController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetCustomerById(Guid id)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _repository.GetCustomerById(id);
         if (result is null)
             return NotFound("No customer is found");
@@ -42,6 +46,8 @@ public class CustomerController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetCustomerByEmail(string email)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _repository.GetCustomerByEmail(email);
         if (result is null)
             return NotFound("No customer is found");
@@ -53,6 +59,8 @@ public class CustomerController : ControllerBase
     [ProducesResponseType(400)]
     public async Task<IActionResult> AddCustomer([FromBody] CustomerDto customerDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var customer = await _repository.AddCustomer(customerDto);
         return CreatedAtRoute(nameof(GetCustomerById), new { id = customer.Id}, customer);
     }
@@ -63,6 +71,8 @@ public class CustomerController : ControllerBase
     [ProducesResponseType(400)]
     public async Task<IActionResult> DeleteCustomer([FromRoute] Guid id)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var customer = await _repository.DeleteCustomer(id);
         if (customer is null)
             return NotFound("No customer is found");

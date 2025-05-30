@@ -15,6 +15,7 @@ public class CustomerRepository : ICustomerRepository
 
     public async Task<IEnumerable<CustomerModel>> GetCustomers()
     {
+        
         if (await _context.Customers.AnyAsync(x => x.Id == Guid.Empty))
             return null!;
         var customers = await _context.Customers.ToListAsync();

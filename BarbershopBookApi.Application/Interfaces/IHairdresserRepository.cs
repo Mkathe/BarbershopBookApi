@@ -14,4 +14,5 @@ public interface IHairdresserRepository
     Task<HairdresserModel?> DeleteHairdresser(Guid id);
     Task<HairdresserModel?> ToBook(string lastName, DateTime date);
     Task<HairdresserModel?> ToUnBook(string lastName);
+    Task<HairdresserModel?>? ToAddFreeDate(AddingDatesToHairdresserDto dateDto);
 }

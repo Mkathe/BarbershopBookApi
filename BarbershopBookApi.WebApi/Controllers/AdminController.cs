@@ -21,6 +21,8 @@ public class AdminController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetAdmins()
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var admins = await _repository.GetAdmins();
         return Ok(admins);
     }
@@ -29,6 +31,8 @@ public class AdminController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetAdminById([FromRoute] Guid Id)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _repository.GetAdmin(id: Id);
         return Ok(result);
     }
@@ -36,6 +40,8 @@ public class AdminController : ControllerBase
     [Authorize]
     public async Task<ActionResult<AdminModel>> Register(AdminDto request)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var user = await _authService.RegisterAdmin(request);
         if (user == null)
         {
@@ -47,6 +53,8 @@ public class AdminController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<TokenResponseDto>> Login(AdminDto adminDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _authService.LoginAdmin(adminDto);
         if (result is null)
             return BadRequest("The username or password is invalid");
@@ -56,6 +64,8 @@ public class AdminController : ControllerBase
     [Authorize]
     public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _authService.RefreshTokenAsync(request);
         if (result is null || result.AccessToken is null || result.RefreshToken is null)
         {

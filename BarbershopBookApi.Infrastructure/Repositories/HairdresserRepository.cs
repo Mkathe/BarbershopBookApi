@@ -133,4 +133,26 @@
             await _context.SaveChangesAsync();
             return hairdresser;
         }
+
+        public async Task<HairdresserModel?> ToAddFreeDate(AddingDatesToHairdresserDto dateDto)
+        {
+            var hairdresser = await GetHairdresserByLastName(dateDto.LastName);
+            if (hairdresser is null)
+                return null;
+            foreach (var date in dateDto.FreeDateTime)
+            {
+                if (!hairdresser.FreeDateTime.Contains(date) &&
+                    date > DateTime.Now)
+                {
+                    hairdresser.FreeDateTime.Add(date);
+                }
+                else
+                {
+                    _logger.LogError("Date is not valid: {date}", date);
+                    return null;
+                }
+            }
+            await _context.SaveChangesAsync();
+            return hairdresser;
+        }
     }

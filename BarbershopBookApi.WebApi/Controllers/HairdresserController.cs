@@ -2,7 +2,6 @@ using BarbershopBookApi.Application.DTOs;
 using BarbershopBookApi.Application.Interfaces;
 using BarbershopBookApi.Domain;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarbershopBookApi.Controllers;
@@ -15,6 +14,8 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
     [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<HairdresserModel>>> Get()
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _repository.GetHairdressers();
         return Ok(result);
     }
@@ -26,6 +27,8 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
 
     public async Task<IActionResult> GetHairdresserById([FromRoute] Guid id)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _repository.GetHairdresserById(id);
         if (result is null)
             return NotFound("Hairdresser is not found");
@@ -38,6 +41,8 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
 
     public async Task<IActionResult> GetHairdresserByLastName(string lastName)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _repository.GetHairdresserByLastName(lastName);
         if (result is null)
             return NotFound("Hairdresser is not found");
@@ -50,6 +55,8 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
 
     public async Task<ActionResult<bool>> IsHairdresserFreeAtTheChoosingDate(string lastName, DateTime date)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _repository.IsHairdresserFreeAtTheChoosingDate(lastName, date);
         if (result is false)
             return NotFound("Hairdresser is not found or busy");
@@ -60,6 +67,8 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
     [ProducesResponseType(201)]
     public async Task<IActionResult> AddHairdresser([FromBody] HairdresserDto hairdresserDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var hairdresser = await _repository.AddHairdresser(hairdresserDto);
         return CreatedAtRoute(nameof(GetHairdresserById), new {id = hairdresser.Id}, hairdresser);
     }
@@ -70,6 +79,8 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
     [ProducesResponseType(400)]
     public async Task<IActionResult> UpdateHairdresser([FromRoute] Guid id, [FromBody] HairdresserDto hairdresserDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _repository.UpdateHairdresser(id, hairdresserDto);
         if (result is null)
             return BadRequest("The hairdresser is not found or null");
@@ -83,6 +94,8 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
     [ProducesResponseType(500)]
     public async Task<IActionResult> BookHairdresser([FromBody] BookingRequestDto bookingRequestDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var success = await _bookingService.BookHairdresserAsync(bookingRequestDto);
         if (!success)
             return BadRequest("Hairdresser is already booked or not found on that date");
@@ -95,9 +108,25 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
     [ProducesResponseType(404)]
     public async Task<IActionResult> UnBookHairdresser([FromRoute] string lastname)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var model = await _repository.ToUnBook(lastname);
         if (model is null)
             return BadRequest("Hairdresser's lastname is misspelled or not found");
+        return Ok(model);
+    }
+    [HttpPatch("hairdressers/update/insertDate")]
+    [Authorize]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> InsertDatesToHairdresser([FromBody] AddingDatesToHairdresserDto dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        var model = await _repository.ToAddFreeDate(dto);
+        if (model is null)
+            return BadRequest("Hairdresser's lastname is misspelled or not found or date is already added or date is not valid");
         return Ok(model);
     }
     [HttpDelete("hairdresser/delete/{id:guid}")]
@@ -106,6 +135,8 @@ public class HairdresserController(IHairdresserRepository _repository, IBookingS
     [ProducesResponseType(404)]
     public async Task<IActionResult> DeleteHairdresser([FromRoute] Guid id)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         var result = await _repository.DeleteHairdresser(id);
         if (result is null)
             return NotFound("The hairdresser is not found");
